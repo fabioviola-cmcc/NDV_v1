@@ -17,13 +17,13 @@ Here you will clone the script to Zeus and create an environment called ndv_v1 w
 - cd folder_where_you_are_installing_the_package 
 - git clone https://github.com/afonsogneto/NDV.git
 - cd NDV_v1
-- install.sh (to create environment)
+- source install.sh (to create environment)
 
 ## 2. Use
 
 Here you will activate the environment, load the necessary modules, modify the file ndv_input.py and run the script. Once on /NDV_v1:
 
-- setup.sh
+- source setup.sh
 - vi ndv_input.py
 - Modify nvd_input.py according to your needs following the instructions in the file and save it
 - bsub -Is -q p_long -P 0419 python ndv_run.py 
