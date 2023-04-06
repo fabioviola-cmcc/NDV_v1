@@ -23,30 +23,30 @@ Here you will clone the script to Zeus and create an environment called ndv_v1 w
 
 Here you will activate the environment, load the necessary modules, modify the file ndv_input.py and run the script. Once on /NDV_v1:
 
-a) setup.sh
-b) vi ndv_input.py
-c) Modify nvd_input.py according to your needs following the instructions in the file and save it
-d) bsub -Is -q p_long -P 0419 python ndv_run.py 
+- setup.sh
+- vi ndv_input.py
+- Modify nvd_input.py according to your needs following the instructions in the file and save it
+- bsub -Is -q p_long -P 0419 python ndv_run.py 
 
 ## 3. Output and files
 
-a) The output figures will be saved on /NDV_v1/output/folder_name_of_your_choice
-b) Inside this folder, the current version of ndv_input.py will be saved so you have a record of the input commands used to create those figures
-c) The intermediate .nc files are saved on NDV_v1/files. These files are saved only during the first time you run a specific combination of product/variables/period, so running the script becomes much faster once these files are already saved.
+- The output figures will be saved on /NDV_v1/output/folder_name_of_your_choice
+- Inside this folder, the current version of ndv_input.py will be saved so you have a record of the input commands used to create those figures
+- The intermediate .nc files are saved on NDV_v1/files. These files are saved only during the first time you run a specific combination of product/variables/period, so running the script becomes much faster once these files are already saved.
 
 ## 4. Produts
 
-a) AdriaClim Historical
-b) AdriaClim Projection
-c) CMEMS Reanalysis
+- AdriaClim Historical
+- AdriaClim Projection
+- CMEMS Reanalysis
 
 ## 5. Types of plots
 
-a) Daily time series of spatial mean
-b) Monthly time series of spatial mean
-c) Seasonal time series of spatial mean
-d) 2D map of mean field
-e) 2D map of monthly mean field
-f) 2D map of seasonal mean field
-g) Mean year
+- Daily time series of spatial mean
+- Monthly time series of spatial mean
+- Seasonal time series of spatial mean
+- 2D map of mean field
+- 2D map of monthly mean field
+- 2D map of seasonal mean field
+- Mean year
 
