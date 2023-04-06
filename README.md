@@ -14,10 +14,9 @@ This file explains how to install and use the package NDV_v1. NDV_v1 is a Python
 
 Here you will clone the script to Zeus and create an environment called ndv_v1 with the necessary packages to run the script
 
-a) cd folder_where_you_are_installing_the_package
-b) mkdir NDV_v1
-c) cd NDV_v1 
-d) git clone https://github.com/afonsogneto/NDV.git
+a) cd folder_where_you_are_installing_the_package 
+b) git clone https://github.com/afonsogneto/NDV.git
+c) cd NDV_v1
 e) install.sh (to create environment)
 
 ## 2. Use
