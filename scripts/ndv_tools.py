@@ -277,8 +277,8 @@ def create_var_list_cmems(var_load):
         var_list_cmems[var_load.index('T')] = 'thetao'
     if 'S' in var_load:
         var_list_cmems[var_load.index('S')] = 'so'
-    if 'SSH' in var_load:
-        var_list_cmems[var_load.index('SSH')] = 'zos'
+    if 'zos' in var_load:
+        var_list_cmems[var_load.index('zos')] = 'zos'
     if 'U' in var_load:
         var_list_cmems[var_load.index('U')] = 'uo'
     if 'V' in var_load:
@@ -296,8 +296,8 @@ def create_var_list2_cmems(var_input):
         var_list2_cmems[var_input.index('T')] = 'thetao'
     if 'S' in var_input:
         var_list2_cmems[var_input.index('S')] = 'so'
-    if 'SSH' in var_input:
-        var_list2_cmems[var_input.index('SSH')] = 'zos'
+    if 'zos' in var_input:
+        var_list2_cmems[var_input.index('zos')] = 'zos'
     if 'U' in var_input:
         var_list2_cmems[var_input.index('U')] = 'uo'
     if 'V' in var_input:
@@ -311,6 +311,8 @@ def create_var_list2_cmems(var_input):
         var_list2_cmems[var_input.index('SurfVel')] = 'SurfVel'
     if 'T_VertInt' in var_input:
         var_list2_cmems[var_input.index('T_VertInt')] = 'T_VertInt'
+    if 'SSH' in var_input:
+        var_list2_cmems[var_input.index('SSH')] = 'SSH'
         
     return(var_list2_cmems)
 
@@ -419,8 +421,8 @@ def create_grid_list_cmems(var_load):
         grid_list_cmems[var_load.index('T')] = 'TEMP'
     if 'S' in var_load:
         grid_list_cmems[var_load.index('S')] = 'PSAL'
-    if 'SSH' in var_load:
-        grid_list_cmems[var_load.index('SSH')] = 'ASLV'
+    if 'zos' in var_load:
+        grid_list_cmems[var_load.index('zos')] = 'ASLV'
     if 'U' in var_load:
         grid_list_cmems[var_load.index('U')] = 'RFVL'
     if 'V' in var_load:
@@ -436,8 +438,8 @@ def create_grid_input_cmems(var_input):
         grid_input_cmems[var_input.index('T')] = 'TEMP'
     if 'S' in var_input:
         grid_input_cmems[var_input.index('S')] = 'PSAL'
-    if 'SSH' in var_input:
-        grid_input_cmems[var_input.index('SSH')] = 'ASLV'
+    if 'zos' in var_input:
+        grid_input_cmems[var_input.index('zos')] = 'ASLV'
     if 'U' in var_input:
         grid_input_cmems[var_input.index('U')] = 'RFVL'
     if 'V' in var_input:
@@ -451,6 +453,8 @@ def create_grid_input_cmems(var_input):
         grid_input_cmems[var_input.index('SurfVel')] = 'RFVL'
     if 'T_VertInt' in var_input:
         grid_input_cmems[var_input.index('T_VertInt')] = 'TEMP'
+    if 'SSH' in var_input:
+        grid_input_cmems[var_input.index('SSH')] = 'ASLV'
         
     return(grid_input_cmems)
 

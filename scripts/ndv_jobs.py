@@ -191,7 +191,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_T' in locals():
                 print('    '+path_input_this+file_input_this_T)
                 # Open datasets
-                ds_T_historical = xr.open_mfdataset(path_input_this+file_input_this_T, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_T_historical = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_T_historical['nav_lat'] = ds_T_historical['nav_lat'].sel(x=1, drop=True)
                 ds_T_historical['nav_lon'] = ds_T_historical['nav_lon'].sel(y=1, drop=True)
@@ -209,7 +209,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_U' in locals():
                 print('    '+path_input_this+file_input_this_U)
                 # Open datasets
-                ds_U_historical = xr.open_mfdataset(path_input_this+file_input_this_U, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_U_historical = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_U_historical['nav_lat'] = ds_U_historical['nav_lat'].sel(x=1, drop=True)
                 ds_U_historical['nav_lon'] = ds_U_historical['nav_lon'].sel(y=1, drop=True)
@@ -227,7 +227,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_V' in locals():
                 print('    '+path_input_this+file_input_this_V)
                 # Open datasets
-                ds_V_historical = xr.open_mfdataset(path_input_this+file_input_this_V, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_V_historical = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_V_historical['nav_lat'] = ds_V_historical['nav_lat'].sel(x=1, drop=True)
                 ds_V_historical['nav_lon'] = ds_V_historical['nav_lon'].sel(y=1, drop=True)
@@ -245,7 +245,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_W' in locals():
                 print('    '+path_input_this+file_input_this_W)
                 # Open datasets
-                ds_W_historical = xr.open_mfdataset(path_input_this+file_input_this_W, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_W_historical = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_W_historical['nav_lat'] = ds_W_historical['nav_lat'].sel(x=1, drop=True)
                 ds_W_historical['nav_lon'] = ds_W_historical['nav_lon'].sel(y=1, drop=True)
@@ -274,7 +274,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_T' in locals():
                     print('    '+path_input_this+file_input_this_T)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_T, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -292,7 +292,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_U' in locals():
                     print('    '+path_input_this+file_input_this_U)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_U, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -310,7 +310,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_V' in locals():
                     print('    '+path_input_this+file_input_this_V)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_V, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -328,7 +328,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_W' in locals():
                     print('    '+path_input_this+file_input_this_W)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_W, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -343,7 +343,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     del ds_this
 
                 del path_input_this
-
+            
             # Load mask file to apply to DataArrays
             ds_mask = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
             # Open T mask if T variables were selected
@@ -400,8 +400,18 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
             if 'ds_V_historical' not in locals():
                 ds_V_historical = xr.Dataset()
             if 'ds_W_historical' not in locals():
-                ds_W_historical = xr.Dataset()
-
+                ds_W_historical = xr.Dataset()  
+                
+            # Load datasets
+            if 'ds_T_historical' in locals():
+                ds_T_historical = ds_T_historical.load()
+            if 'ds_U_historical' in locals():
+                ds_U_historical = ds_U_historical.load()
+            if 'ds_V_historical' in locals():
+                ds_V_historical = ds_V_historical.load()
+            if 'ds_W_historical' in locals():
+                ds_W_historical = ds_W_historical.load()
+                        
         else:
             ds_T_historical = xr.Dataset()
             ds_U_historical = xr.Dataset()
@@ -433,7 +443,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
         cmap_list = create_cmap_list(var_input)
 
         # Create empty output path
-        #path_output_this = ''
+        path_output_this = ''
 
     return(ds_T_historical, ds_U_historical, ds_V_historical, ds_W_historical, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this)
 
@@ -595,7 +605,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_T' in locals():
                 print('    '+path_input_this+file_input_this_T)
                 # Open datasets
-                ds_T_projection = xr.open_mfdataset(path_input_this+file_input_this_T, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_T_projection = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_T_projection['nav_lat'] = ds_T_projection['nav_lat'].sel(x=1, drop=True)
                 ds_T_projection['nav_lon'] = ds_T_projection['nav_lon'].sel(y=1, drop=True)
@@ -613,7 +623,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_U' in locals():
                 print('    '+path_input_this+file_input_this_U)
                 # Open datasets
-                ds_U_projection = xr.open_mfdataset(path_input_this+file_input_this_U, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_U_projection = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_U_projection['nav_lat'] = ds_U_projection['nav_lat'].sel(x=1, drop=True)
                 ds_U_projection['nav_lon'] = ds_U_projection['nav_lon'].sel(y=1, drop=True)
@@ -631,7 +641,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_V' in locals():
                 print('    '+path_input_this+file_input_this_V)
                 # Open datasets
-                ds_V_projection = xr.open_mfdataset(path_input_this+file_input_this_V, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_V_projection = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_V_projection['nav_lat'] = ds_V_projection['nav_lat'].sel(x=1, drop=True)
                 ds_V_projection['nav_lon'] = ds_V_projection['nav_lon'].sel(y=1, drop=True)
@@ -649,7 +659,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
             if 'file_input_this_W' in locals():
                 print('    '+path_input_this+file_input_this_W)
                 # Open datasets
-                ds_W_projection = xr.open_mfdataset(path_input_this+file_input_this_W, chunks = {"nav_lat": 20, "nav_lon": 20})
+                ds_W_projection = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                 # Drop one dimension from spatial coordinates
                 ds_W_projection['nav_lat'] = ds_W_projection['nav_lat'].sel(x=1, drop=True)
                 ds_W_projection['nav_lon'] = ds_W_projection['nav_lon'].sel(y=1, drop=True)
@@ -678,7 +688,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_T' in locals():
                     print('    '+path_input_this+file_input_this_T)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_T, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -696,7 +706,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_U' in locals():
                     print('    '+path_input_this+file_input_this_U)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_U, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -714,7 +724,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_V' in locals():
                     print('    '+path_input_this+file_input_this_V)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_V, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -732,7 +742,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 if 'file_input_this_W' in locals():
                     print('    '+path_input_this+file_input_this_W)
                     # Open datasets
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_W, chunks = {"nav_lat": 20, "nav_lon": 20})
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                     # Drop one dimension from spatial coordinates
                     ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
                     ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
@@ -747,7 +757,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     del ds_this
 
                 del path_input_this
-
+            
             # Load mask file to apply to DataArrays
             ds_mask = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
             # Open T mask if T variables were selected
@@ -798,7 +808,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     # If T is not called, remove it from the Dataset and var_list
                     if 'T' not in var_input:
                         ds_T_projection = ds_T_projection.drop(var_list[var_load.index('T')])
-
+        
             # If any of the grids was not used, create an empty dataset for that grid
             if 'ds_T_projection' not in locals():
                 ds_T_projection = xr.Dataset()
@@ -808,6 +818,16 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_V_projection = xr.Dataset()
             if 'ds_W_projection' not in locals():
                 ds_W_projection = xr.Dataset()
+                
+            # Load datasets
+            if 'ds_T_projection' in locals():
+                ds_T_projection = ds_T_projection.load()
+            if 'ds_U_projection' in locals():
+                ds_U_projection = ds_U_projection.load()
+            if 'ds_V_projection' in locals():
+                ds_V_projection = ds_V_projection.load()
+            if 'ds_W_projection' in locals():
+                ds_W_projection = ds_W_projection.load()
         
         else:
             ds_T_projection = xr.Dataset()
@@ -912,12 +932,13 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
         if var_input_new != []:
 
             # Define original and calculated variables
-            var_original = ['T', 'S', 'SSH','U', 'V']
+            var_original = ['T', 'S', 'zos','U', 'V']
             var_calculated = {
                 "SurfVel": ["U","V"],
                 "SST": ["T"],
                 "SSS": ["S"],
                 "T_VertInt": ["T"],
+                "SSH": ["zos"],
                 }
 
             # Create list of variables to be loaded
@@ -943,7 +964,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             # Define grids (T, U, V or W)
             var_aux_TEMP = ['T']
             var_aux_PSAL = ['S']
-            var_aux_ASLV = ['SSH']
+            var_aux_ASLV = ['zos']
             var_aux_RFVL = ['U', 'V']
 
             for var in var_aux_TEMP:
@@ -980,7 +1001,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             # Grid TEMP, if grid TEMP variables were selected
             if 'file_input_this_TEMP' in locals():
                 print('    '+path_input_this+file_input_this_TEMP)
-                ds_TEMP = xr.open_mfdataset(path_input_this+file_input_this_TEMP, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                ds_TEMP = xr.open_mfdataset(path_input_this+file_input_this_TEMP, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                 ind_TEMP = list(np.where(np.array(grid_list_cmems)=='TEMP')[0])
                 var_list_TEMP = []
                 for ind in ind_TEMP:
@@ -989,7 +1010,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             # Grid PSAL, if grid PSAL variables were selected
             if 'file_input_this_PSAL' in locals():
                 print('    '+path_input_this+file_input_this_PSAL)
-                ds_PSAL = xr.open_mfdataset(path_input_this+file_input_this_PSAL, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                ds_PSAL = xr.open_mfdataset(path_input_this+file_input_this_PSAL, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                 ind_PSAL = list(np.where(np.array(grid_list_cmems)=='PSAL')[0])
                 var_list_PSAL = []
                 for ind in ind_PSAL:
@@ -998,7 +1019,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             # Grid ASLV, if grid ASLV variables were selected
             if 'file_input_this_ASLV' in locals():
                 print('    '+path_input_this+file_input_this_ASLV)
-                ds_ASLV = xr.open_mfdataset(path_input_this+file_input_this_ASLV, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                ds_ASLV = xr.open_mfdataset(path_input_this+file_input_this_ASLV, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                 ind_ASLV = list(np.where(np.array(grid_list_cmems)=='ASLV')[0])
                 var_list_ASLV = []
                 for ind in ind_ASLV:
@@ -1007,7 +1028,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             # Grid RFVL, if grid RFVL variables were selected
             if 'file_input_this_RFVL' in locals():
                 print('    '+path_input_this+file_input_this_RFVL)
-                ds_RFVL = xr.open_mfdataset(path_input_this+file_input_this_RFVL, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                ds_RFVL = xr.open_mfdataset(path_input_this+file_input_this_RFVL, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                 ind_RFVL = list(np.where(np.array(grid_list_cmems)=='RFVL')[0])
                 var_list_RFVL = []
                 for ind in ind_RFVL:
@@ -1024,7 +1045,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                 # Open dataset in grid TEMP, if grid TEMP variables were selected
                 if 'file_input_this_TEMP' in locals():
                     print('    '+path_input_this+file_input_this_TEMP)
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_TEMP, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_TEMP, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                     ds_this = ds_this[var_list_TEMP]
                     # Concatenate data to create a single dataset
                     ds_TEMP = xr.concat([ds_TEMP, ds_this], dim = "time")
@@ -1033,7 +1054,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                 # Open dataset in grid PSAL, if grid PSAL variables were selected
                 if 'file_input_this_PSAL' in locals():
                     print('    '+path_input_this+file_input_this_PSAL)
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_PSAL, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_PSAL, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                     ds_this = ds_this[var_list_PSAL]
                     # Concatenate data to create a single dataset
                     ds_PSAL = xr.concat([ds_PSAL, ds_this], dim = "time")
@@ -1042,7 +1063,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                 # Open dataset in grid ASLV, if grid ASLV variables were selected
                 if 'file_input_this_ASLV' in locals():
                     print('    '+path_input_this+file_input_this_ASLV)
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_ASLV, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_ASLV, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                     ds_this = ds_this[var_list_ASLV]
                     # Concatenate data to create a single dataset
                     ds_ASLV = xr.concat([ds_ASLV, ds_this], dim = "time")
@@ -1051,7 +1072,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                 # Open dataset in grid RFVL, if grid RFVL variables were selected
                 if 'file_input_this_RFVL' in locals():
                     print('    '+path_input_this+file_input_this_RFVL)
-                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_RFVL, chunks = {"nav_lat": 20, "nav_lon": 20}).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
+                    ds_this = xr.open_mfdataset(path_input_this+file_input_this_RFVL, parallel = True).sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
                     ds_this = ds_this[var_list_RFVL]
                     # Concatenate data to create a single dataset
                     ds_RFVL = xr.concat([ds_RFVL, ds_this], dim = "time")
@@ -1059,6 +1080,16 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
 
                 del path_input_this
 
+            # Load datasets
+            #if 'ds_TEMP' in locals():
+            #    ds_TEMP = ds_TEMP.load()
+            #if 'ds_PSAL' in locals():
+            #    ds_PSAL = ds_PSAL.load()
+            #if 'ds_ASLV' in locals():
+            #    ds_ASLV = ds_ASLV.load()
+            #if 'ds_RFVL' in locals():
+            #    ds_RFVL = ds_RFVL.load()
+            
             # Load mask file to apply to DataArrays
             if path_mask != '':
                 #ds_mask = xr.open_dataset(f'{path_mask[run_input.index("reanalysis")]}{file_mask[run_input.index("reanalysis")]}').sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
@@ -1133,6 +1164,13 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                     # If T is not called, remove it from the Dataset and var_list
                     if 'T' not in var_input:
                         ds_TEMP = ds_TEMP.drop(var_list_cmems[var_load.index('T')])
+                        
+                if var == "SSH":
+                    # Calculate Sea Surface Height and add it to respective Dataset
+                    ds_ASLV['SSH'] = ds_ASLV['zos'].isel(depth=0)
+                    # If zos is not called, remove it from the Dataset and var_list
+                    if 'zos' not in var_input:
+                        ds_ASLV = ds_ASLV.drop(var_list_cmems[var_load.index('zos')])
 
             # Change coordinate names to match NEMO's or create empty dataset (TEMP)
             if 'ds_TEMP' in locals():
@@ -1170,6 +1208,8 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             ds_cmems = xr.merge([ds_TEMP, ds_PSAL, ds_ASLV, ds_RFVL])
             ds_cmems = ds_cmems.isel(t=0)
             
+            ds_cmems = ds_cmems.load()
+            
         else:
             ds_cmems = xr.Dataset()
             
@@ -1193,9 +1233,31 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
 # Function to save intermediate files
 def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds_W_historical, ds_T_projection, ds_U_projection, ds_V_projection, ds_W_projection, ds_cmems, path_mask, file_mask, var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, path_file):
     # Load mask file(s)
-    if 'historical' in run_input or 'projection' in run_input:
+    if 'historical' in run_input:
         # Get dx and dy
         ds_mask = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
+        # Drop useless extra dimension
+        #ds_mask['nav_lat'] = ds_mask['nav_lat'].sel(x=0)
+        #ds_mask['nav_lon'] = ds_mask['nav_lon'].sel(y=0)
+        # Swap dimensions
+        #ds_mask = ds_mask.swap_dims({'y': 'nav_lat', 'x': 'nav_lon'})
+        # tmask
+        mask = ds_mask['tmask'].isel(z = slice(0,1)).squeeze()
+        da_area_T = ds_mask['e1t'].squeeze() * ds_mask['e2t'].squeeze().where(mask==1)
+        # umask
+        mask = ds_mask['umask'].isel(z = slice(0,1)).squeeze()
+        da_area_U = ds_mask['e1u'].squeeze() * ds_mask['e2u'].squeeze().where(mask==1)
+        # vmask
+        mask = ds_mask['vmask'].isel(z = slice(0,1)).squeeze()
+        da_area_V = ds_mask['e1v'].squeeze() * ds_mask['e2v'].squeeze().where(mask==1)
+        #fmask
+        mask = ds_mask['fmask'].isel(z = slice(0,1)).squeeze()
+        da_area_W = ds_mask['e1f'].squeeze() * ds_mask['e2f'].squeeze().where(mask==1)
+        del mask, ds_mask
+    
+    if 'projection' in run_input:
+        # Get dx and dy
+        ds_mask = xr.open_dataset(f'{path_mask[run_input.index("projection")]}{file_mask[run_input.index("projection")]}')
         # Drop useless extra dimension
         #ds_mask['nav_lat'] = ds_mask['nav_lat'].sel(x=0)
         #ds_mask['nav_lon'] = ds_mask['nav_lon'].sel(y=0)
@@ -1490,9 +1552,9 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
         var_input_new = var_input.copy()
         var_list2_cmems_new = var_list2_cmems.copy()
         # Get file path
-        path_file_this = (f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
+        path_file_this = (f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')       
         # Check if intermediate files exist and load files
-        if os.path.exists(path_file_this):
+        if os.path.exists(path_file_this) :
             ds_cmems_this_aux = xr.open_dataset(f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
             mode_cmems = "a"
             for i in range(0,len(var_input)):
@@ -1568,8 +1630,13 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
                     ds_cmems_this_interp[f'{var_input_new[i]}_seasonalmap'] = ds_cmems_this_interp[f'{var_input_new[i]}_seasonalmap'].chunk(chunks={'season': 1})
                     ds_cmems_this_interp[f'{var_input_new[i]}_dailymeanyear'] = ds_cmems_this_interp[f'{var_input_new[i]}_dailymeanyear'].chunk(chunks={'dayofyear': 1})
                     ds_cmems_this_interp[f'{var_input_new[i]}_monthlymeanyear'] = ds_cmems_this_interp[f'{var_input_new[i]}_monthlymeanyear'].chunk(chunks={'monthofyear': 1})
+                # Drop depth dimension
+                #ds_cmems_this_interp = ds_cmems_this_interp.drop_dims('depth')
+                # Save NetCDF file
                 print('    Reanalysis (interp)')
                 ds_cmems_this_interp.to_netcdf(f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc', mode = mode_cmems_interp)
+            # Drop depth dimension
+            #ds_cmems_this = ds_cmems_this.drop_dims('depth')
             # Save NetCDF file
             print('    Reanalysis')
             ds_cmems_this.to_netcdf(f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc', mode = mode_cmems)         
@@ -1669,7 +1736,7 @@ def plot_dailytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_l
             fig = plt.figure()
             fig.set_size_inches(8, 4)
             ax = fig.add_axes([0.17,0.24,0.8,0.66])
-            da.plot(color='black', linewidth=1.5)
+            plt.plot(time_this, da[:], color='black', linewidth=1.5)
             ax.set_ylabel(cbar_title[i])
             ax.set_xlabel('Time')
             mean_this = str(np.round(np.nanmean(da),2))
@@ -1939,7 +2006,7 @@ def plot_monthlytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var
             fig = plt.figure()
             fig.set_size_inches(8, 4)
             ax = fig.add_axes([0.17,0.24,0.8,0.66])
-            da.plot(color='black', linewidth=1.5)
+            plt.plot(time_this, da[:], color='black', linewidth=1.5)
             ax.set_ylabel(cbar_title[i])
             ax.set_xlabel('Time')
             mean_this = str(np.round(np.nanmean(da),2))
@@ -2220,7 +2287,7 @@ def plot_annualtimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_
             fig = plt.figure()
             fig.set_size_inches(8, 4)
             ax = fig.add_axes([0.17,0.24,0.8,0.66])
-            da.plot(color='black', linewidth=1.5)
+            plt.plot(time_this, da[:], color='black', linewidth=1.5)
             ax.set_ylabel(cbar_title[i])
             ax.set_xlabel('Time')
             mean_this = str(np.round(np.nanmean(da),2))
@@ -2422,8 +2489,12 @@ def plot_meanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, v
         # Identify time
         timei_this = timei[run_input.index("reanalysis")]
         timef_this = timef[run_input.index("reanalysis")]
+        # Load dataset
         ds_cmems = nc.Dataset(f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
-        ds_cmems_interp = nc.Dataset(f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
+        # Load interpolated dataset if it exists (only used for comparison)
+        path_ds_cmems_interp = f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc'
+        if os.path.exists(path_ds_cmems_interp):
+            ds_cmems_interp = nc.Dataset(path_ds_cmems_interp)
 
     for i in range(0,len(var_input)):
 
@@ -2779,8 +2850,12 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
         # Identify time
         timei_this = timei[run_input.index("reanalysis")]
         timef_this = timef[run_input.index("reanalysis")]
+        # Load dataset
         ds_cmems = nc.Dataset(f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
-        ds_cmems_interp = nc.Dataset(f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
+        # Load interpolated dataset if it exists (only used for comparison)
+        path_ds_cmems_interp = f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc'
+        if os.path.exists(path_ds_cmems_interp):
+            ds_cmems_interp = nc.Dataset(path_ds_cmems_interp)
 
     for i in range(0,len(var_input)):
 
@@ -2886,10 +2961,10 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
                                        np.nanmin(da_lat),np.nanmax(da_lat)])
                 cbar=plt.colorbar(im)
                 cbar.set_label(cbar_title[i])
-                plt.savefig(f'{path_output_this}maps/{var_input[i]}_{da_month_str[mo]}_mean_{run_input}_{timei[0]}-{timef[0]}_{timei[1]}-{timef[1]}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.png')
+                plt.savefig(f'{path_output_this}maps/{var_input[i]}_{da_month_str[mo]}_mean_{run_input}_{timei}-{timef}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.png')
                 plt.close(fig)
 
-                print(f'    {var_long[i]} ({da_1_month_str[mo]}) OK.')
+                print(f'    {var_long[i]} ({da_month_str[mo]}) OK.')
 
         # Comparison between two products
         if len(run_input)==2:
@@ -3165,8 +3240,12 @@ def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_
         # Identify time
         timei_this = timei[run_input.index("reanalysis")]
         timef_this = timef[run_input.index("reanalysis")]
+        # Load dataset
         ds_cmems = nc.Dataset(f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
-        ds_cmems_interp = nc.Dataset(f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
+        # Load interpolated dataset if it exists (only used for comparison)
+        path_ds_cmems_interp = f'{path_file}reanalysis_interp_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc'
+        if os.path.exists(path_ds_cmems_interp):
+            ds_cmems_interp = nc.Dataset(path_ds_cmems_interp)
 
     for i in range(0,len(var_input)):
 
@@ -3274,7 +3353,7 @@ def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_
                 plt.savefig(f'{path_output_this}maps/{var_input[i]}_{da_season_str[mo]}_mean_{run_input}_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.png')
                 plt.close(fig)
 
-                print(f'    {var_long[i]} ({da_1_season_str[mo]}) OK.')
+                print(f'    {var_long[i]} ({da_season_str[mo]}) OK.')
 
         # Comparison between two products
         if len(run_input)==2:
@@ -3612,9 +3691,9 @@ def plot_meanyear(path_mask, file_mask, var_list2, var_list2_cmems, var_long, ru
             plt.plot(da2[:], color='black', linewidth=1.5)
             ax.set_ylabel(cbar_title[i])
             ax.set_xlabel('Month')
-            mean_this = str(np.round(da2_this.mean(skipna = True).values,2))
-            std_this = str(np.round(da2_this.std(skipna = True).values,2))
-            var_this = str(np.round(da2_this.var(skipna = True).values,2))
+            mean_this = str(np.round(np.nanmean(da2),2))
+            std_this = str(np.round(np.nanstd(da2),2))
+            var_this = str(np.round(np.nanvar(da2),2))
             ax.set_title(f'Monthly mean-year {var_long[i]} ({area_input[0]}°N-{area_input[1]}°N, {area_input[2]}°E-{area_input[3]}°E) \n '
                          f'Mean = {mean_this}, '
                          f'Std = {std_this}, '
