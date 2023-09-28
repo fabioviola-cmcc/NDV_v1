@@ -34,7 +34,7 @@ sns.set_theme(style="whitegrid")
 ##################################################################
 
 # Function to load NetCDF files
-def load_data_historical(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_file):
+def load_data_historical(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_file, nemo_version):
 
     # If run refers to NEMO historical output, load data. Otherwise, create empty datasets 
     if 'historical' in run_input:
@@ -76,7 +76,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Create subfolders in output folder
                 os.makedirs(os.path.join(path_output_this, 'maps/'))
                 os.makedirs(os.path.join(path_output_this, 'timeseries/'))
-        
+
         # Attribute the NEMO var names to the plotted variables
         var_list2 = create_var_list2(var_input)
 
@@ -193,13 +193,18 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_T_historical = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                 # Drop one dimension from spatial coordinates
-                #ds_T_historical['nav_lat'] = ds_T_historical['nav_lat'].sel(x=1, drop=True)
-                #ds_T_historical['nav_lon'] = ds_T_historical['nav_lon'].sel(y=1, drop=True)
-                #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                ds_T_historical = ds_T_historical.rename({'lat': 'nav_lat'})
-                ds_T_historical = ds_T_historical.rename({'lon': 'nav_lon'})
-                ds_T_historical = ds_T_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+                df_msk = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
+                ds_T_historical['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
+                ds_T_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
+
+                ds_T_historical = ds_T_historical.rename({'deptht': 'depth'})
+                if nemo_version!='3.6':
+                    ds_T_historical = ds_T_historical.rename({'tos': 'sosstsst'})
+                    ds_T_historical = ds_T_historical.rename({'sos': 'sosaline'})
+                    ds_T_historical = ds_T_historical.rename({'zos': 'sossheig'})
+                    ds_T_historical = ds_T_historical.rename({'thetao': 'votemper'})
+                    ds_T_historical = ds_T_historical.rename({'so': 'vosaline'})
+
                 # Set index for spatial coordinates
                 ds_T_historical = ds_T_historical.set_xindex("nav_lat")
                 ds_T_historical = ds_T_historical.set_xindex("nav_lon")
@@ -216,13 +221,11 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_U_historical = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                 # Drop one dimension from spatial coordinates
-                #ds_U_historical['nav_lat'] = ds_U_historical['nav_lat'].sel(x=1, drop=True)
-                #ds_U_historical['nav_lon'] = ds_U_historical['nav_lon'].sel(y=1, drop=True)
-                #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                ds_U_historical = ds_U_historical.rename({'lat': 'nav_lat'})
-                ds_U_historical = ds_U_historical.rename({'lon': 'nav_lon'})
-                ds_U_historical = ds_U_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+                ds_U_historical['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
+                ds_U_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
+
+                ds_U_historical = ds_U_historical.rename({'depthu': 'depth'})
+
                 # Set index for spatial coordinates
                 ds_U_historical = ds_U_historical.set_xindex("nav_lat")
                 ds_U_historical = ds_U_historical.set_xindex("nav_lon")
@@ -239,13 +242,11 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_V_historical = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                 # Drop one dimension from spatial coordinates
-                #ds_V_historical['nav_lat'] = ds_V_historical['nav_lat'].sel(x=1, drop=True)
-                #ds_V_historical['nav_lon'] = ds_V_historical['nav_lon'].sel(y=1, drop=True)
-                #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                ds_V_historical = ds_V_historical.rename({'lat': 'nav_lat'})
-                ds_V_historical = ds_V_historical.rename({'lon': 'nav_lon'})
-                ds_V_historical = ds_V_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+                ds_V_historical['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                ds_V_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+
+                ds_V_historical = ds_V_historical.rename({'depthv': 'depth'})
+
                 # Set index for spatial coordinates
                 ds_V_historical = ds_V_historical.set_xindex("nav_lat")
                 ds_V_historical = ds_V_historical.set_xindex("nav_lon")
@@ -262,13 +263,11 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_W_historical = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                 # Drop one dimension from spatial coordinates
-                #ds_W_historical['nav_lat'] = ds_W_historical['nav_lat'].sel(x=1, drop=True)
-                #ds_W_historical['nav_lon'] = ds_W_historical['nav_lon'].sel(y=1, drop=True)
-                #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                ds_W_historical = ds_W_historical.rename({'lat': 'nav_lat'})
-                ds_W_historical = ds_W_historical.rename({'lon': 'nav_lon'})
-                ds_W_historical = ds_W_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+                ds_W_historical['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                ds_W_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+
+                ds_W_historical = ds_W_historical.rename({'depthw': 'depth'})
+
                 # Set index for spatial coordinates
                 ds_W_historical = ds_W_historical.set_xindex("nav_lat")
                 ds_W_historical = ds_W_historical.set_xindex("nav_lon")
@@ -296,13 +295,18 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    #ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
-                    #ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
-                    #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+                    ds_this['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_this['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
+
+                    ds_this = ds_this.rename({'deptht': 'depth'})
+
+                    if nemo_version!='3.6':
+                        ds_this = ds_this.rename({'tos': 'sosstsst'})
+                        ds_this = ds_this.rename({'sos': 'sosaline'})
+                        ds_this = ds_this.rename({'zos': 'sossheig'})
+                        ds_this = ds_this.rename({'thetao': 'votemper'})
+                        ds_this = ds_this.rename({'so': 'vosaline'})
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -319,13 +323,11 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    #ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
-                    #ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
-                    #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+                    ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+
+                    ds_this = ds_this.rename({'depthu': 'depth'})
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -342,13 +344,11 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    #ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
-                    #ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
-                    #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+                    ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+
+                    ds_this = ds_this.rename({'depthv': 'depth'})
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -365,13 +365,11 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    #ds_this['nav_lat'] = ds_this['nav_lat'].sel(x=1, drop=True)
-                    #ds_this['nav_lon'] = ds_this['nav_lon'].sel(y=1, drop=True)
-                    #gverri: replace two line above with 3 below cause of NEMO conversion intoo Erddap format
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+                    ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+
+                    ds_this = ds_this.rename({'depthw': 'depth'})
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -383,12 +381,13 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     del ds_this
 
                 del path_input_this
-            
+
             # Load mask file to apply to DataArrays
             ds_mask = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
             # Open T mask if T variables were selected
             if 'file_input_this_T' in locals():
-                mask = ds_mask['umask'].isel(z = slice(0,1)).squeeze()
+                mask = ds_mask['tmask'].isel(z = slice(0,1)).squeeze()
+                bh =np.squeeze(np.nansum(np.squeeze(ds_mask['e3t_0'][0,:,:,:]*ds_mask['tmask']),axis=0))
                 for var in var_list_T:
                     ds_T_historical[var] = ds_T_historical[var].where(mask==1)
                 del mask
@@ -428,6 +427,8 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 if var == "T_VertInt":
                     # Calculate Vertically-Integrated Temperature and add it to respective Dataset
                     ds_T_historical['T_VertInt'] = ds_T_historical['votemper'].integrate("depth")
+                    for i in range(0,len(ds_T_historical['T_VertInt'][:,0,0])):
+                        ds_T_historical['T_VertInt'][i,:,:] = np.squeeze(ds_T_historical['T_VertInt'][i,:,:])/bh
                     # If T is not called, remove it from the Dataset and var_list
                     if 'T' not in var_input:
                         ds_T_historical = ds_T_historical.drop(var_list[var_load.index('T')])
@@ -441,7 +442,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 ds_V_historical = xr.Dataset()
             if 'ds_W_historical' not in locals():
                 ds_W_historical = xr.Dataset()  
-                
+
             # Load datasets
             if 'ds_T_historical' in locals():
                 ds_T_historical = ds_T_historical.load()
@@ -451,7 +452,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 ds_V_historical = ds_V_historical.load()
             if 'ds_W_historical' in locals():
                 ds_W_historical = ds_W_historical.load()
-                        
+
         else:
             ds_T_historical = xr.Dataset()
             ds_U_historical = xr.Dataset()
@@ -488,7 +489,7 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
     return(ds_T_historical, ds_U_historical, ds_V_historical, ds_W_historical, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this)
 
 # Function to load NetCDF files
-def load_data_projection(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_output_this, path_file):
+def load_data_projection(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_output_this, path_file, nemo_version):
     # If run refers to NEMO, load data. Otherwise, create empty datasets 
     if 'projection' in run_input:
         ## Create list of timesteps to be loaded
@@ -653,7 +654,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_T_projection = ds_T_projection.rename({'lat': 'nav_lat'})
                 ds_T_projection = ds_T_projection.rename({'lon': 'nav_lon'})
                 ds_T_projection = ds_T_projection.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+
                 # Set index for spatial coordinates
                 ds_T_projection = ds_T_projection.set_xindex("nav_lat")
                 ds_T_projection = ds_T_projection.set_xindex("nav_lon")
@@ -676,7 +677,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_U_projection = ds_U_projection.rename({'lat': 'nav_lat'})
                 ds_U_projection = ds_U_projection.rename({'lon': 'nav_lon'})
                 ds_U_projection = ds_U_projection.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+
                 # Set index for spatial coordinates
                 ds_U_projection = ds_U_projection.set_xindex("nav_lat")
                 ds_U_projection = ds_U_projection.set_xindex("nav_lon")
@@ -699,7 +700,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_V_projection = ds_V_projection.rename({'lat': 'nav_lat'})
                 ds_V_projection = ds_V_projection.rename({'lon': 'nav_lon'})
                 ds_V_projection = ds_V_projection.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+
                 # Set index for spatial coordinates
                 ds_V_projection = ds_V_projection.set_xindex("nav_lat")
                 ds_V_projection = ds_V_projection.set_xindex("nav_lon")
@@ -722,7 +723,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_W_projection = ds_W_projection.rename({'lat': 'nav_lat'})
                 ds_W_projection = ds_W_projection.rename({'lon': 'nav_lon'})
                 ds_W_projection = ds_W_projection.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                
+
                 # Set index for spatial coordinates
                 ds_W_projection = ds_W_projection.set_xindex("nav_lat")
                 ds_W_projection = ds_W_projection.set_xindex("nav_lon")
@@ -756,7 +757,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     ds_this = ds_this.rename({'lat': 'nav_lat'})
                     ds_this = ds_this.rename({'lon': 'nav_lon'})
                     ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -779,7 +780,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     ds_this = ds_this.rename({'lat': 'nav_lat'})
                     ds_this = ds_this.rename({'lon': 'nav_lon'})
                     ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -802,7 +803,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     ds_this = ds_this.rename({'lat': 'nav_lat'})
                     ds_this = ds_this.rename({'lon': 'nav_lon'})
                     ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -825,7 +826,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     ds_this = ds_this.rename({'lat': 'nav_lat'})
                     ds_this = ds_this.rename({'lon': 'nav_lon'})
                     ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
-                    
+
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -837,12 +838,13 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                     del ds_this
 
                 del path_input_this
-            
+
             # Load mask file to apply to DataArrays
             ds_mask = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
             # Open T mask if T variables were selected
             if 'file_input_this_T' in locals():
-                mask = ds_mask['umask'].isel(z = slice(0,1)).squeeze()
+                mask = ds_mask['tmask'].isel(z = slice(0,1)).squeeze()
+                bp =np.squeeze(np.nansum(np.squeeze(ds_mask['e3t_0'][0,:,:,:]*ds_mask['tmask']),axis=0))
                 for var in var_list_T:
                     ds_T_projection[var] = ds_T_projection[var].where(mask==1)
                 del mask
@@ -883,12 +885,14 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 if var == "T_VertInt":
                     # Calculate Vertically-Integrated Temperature and add it to respective Dataset
                     ds_T_projection['T_VertInt'] = ds_T_projection['votemper'].integrate("depth")
+                    for i in range(0,len(ds_T_projection['T_VertInt'][:,0,0])):
+                        ds_T_projection['T_VertInt'][i,:,:] = np.squeeze(ds_T_projection['T_VertInt'][i,:,:])/bp
                     # Add Vertically-Integrated Temperature to var_list
                     #var_list.insert(var_input.index('T_VertInt'),'T_VertInt')
                     # If T is not called, remove it from the Dataset and var_list
                     if 'T' not in var_input:
                         ds_T_projection = ds_T_projection.drop(var_list[var_load.index('T')])
-        
+
             # If any of the grids was not used, create an empty dataset for that grid
             if 'ds_T_projection' not in locals():
                 ds_T_projection = xr.Dataset()
@@ -898,7 +902,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_V_projection = xr.Dataset()
             if 'ds_W_projection' not in locals():
                 ds_W_projection = xr.Dataset()
-                
+
             # Load datasets
             if 'ds_T_projection' in locals():
                 ds_T_projection = ds_T_projection.load()
@@ -908,19 +912,19 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 ds_V_projection = ds_V_projection.load()
             if 'ds_W_projection' in locals():
                 ds_W_projection = ds_W_projection.load()
-        
+
         else:
             ds_T_projection = xr.Dataset()
             ds_U_projection = xr.Dataset()
             ds_V_projection = xr.Dataset()
             ds_W_projection = xr.Dataset()
-            
+
     else:
         ds_T_projection = xr.Dataset()
         ds_U_projection = xr.Dataset()
         ds_V_projection = xr.Dataset()
         ds_W_projection = xr.Dataset()
-        
+
         # Attribute the NEMO var names to the plotted variables
         var_list2 = create_var_list2(var_input)
 
@@ -935,7 +939,7 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
 
         # Define colormaps for each input variable
         cmap_list = create_cmap_list(var_input)
-    
+
     return(ds_T_projection, ds_U_projection, ds_V_projection, ds_W_projection, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this)
 
 # Function to load NetCDF files
@@ -1169,7 +1173,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             #    ds_ASLV = ds_ASLV.load()
             #if 'ds_RFVL' in locals():
             #    ds_RFVL = ds_RFVL.load()
-            
+
             # Load mask file to apply to DataArrays
             if path_mask != '':
                 #ds_mask = xr.open_dataset(f'{path_mask[run_input.index("reanalysis")]}{file_mask[run_input.index("reanalysis")]}').sel(lat = slice(area_input[0], area_input[1]), lon = slice(area_input[2], area_input[3]))
@@ -1193,6 +1197,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                 if area_input[0]==39 and area_input[1]==46:
                     mask = xr.where(((mask['lat']<41) & (mask['lon']<16.3)),np.nan,mask)
                     mask = xr.where(((mask['lat']<42) & (mask['lon']<14)),np.nan,mask)
+                br =np.squeeze(np.nansum(np.squeeze(ds_mask['e3t_0'][0,:,:,:]*mask),axis=0))
                 # Open mask if TEMP variables were selected
                 if 'file_input_this_TEMP' in locals():
                     for var in var_list_TEMP:
@@ -1240,13 +1245,16 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
 
                 if var == "T_VertInt":
                     # Calculate Vertically-Integrated Temperature and add it to respective Dataset
-                    ds_TEMP['T_VertInt'] = ds_TEMP['thetao'].fillna(0).integrate("depth")
+                    ds_TEMP['T_VertInt'] = np.squeeze(ds_TEMP['thetao']).fillna(0).integrate("depth")
+                    for i in range(0,len(ds_TEMP['T_VertInt'][:,0,0])):
+                        ds_TEMP['T_VertInt'][i,:,:] = np.squeeze(ds_TEMP['T_VertInt'][i,:,:])/br
+
                     # Mask T_VertInt again due to use of fillna(0) above
-                    ds_TEMP['T_VertInt'] = ds_TEMP['T_VertInt'].where(mask==1)
+                    #ds_TEMP['T_VertInt'] = ds_TEMP['T_VertInt'].where(mask==1)
                     # If T is not called, remove it from the Dataset and var_list
                     if 'T' not in var_input:
                         ds_TEMP = ds_TEMP.drop(var_list_cmems[var_load.index('T')])
-                        
+
                 if var == "SSH":
                     # Calculate Sea Surface Height and add it to respective Dataset
                     ds_ASLV['SSH'] = ds_ASLV['zos'].isel(depth=0)
@@ -1289,15 +1297,15 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
             # Merge datasets
             ds_cmems = xr.merge([ds_TEMP, ds_PSAL, ds_ASLV, ds_RFVL])
             ds_cmems = ds_cmems.isel(t=0)
-            
+
             ds_cmems = ds_cmems.load()
-            
+
         else:
             ds_cmems = xr.Dataset()
-            
+
     else:
         ds_cmems = xr.Dataset()
-        
+
         # Attribute the CMEMS var names to the plotted variables
         var_list2_cmems = create_var_list2_cmems(var_input)
 
@@ -1309,7 +1317,7 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
 
         # Define colormaps for each input variable
         cmap_list = create_cmap_list(var_input)
-    
+
     return(ds_cmems, var_list2_cmems, var_long, cbar_title, cmap_list, path_output_this)
 
 # Function to save intermediate files
@@ -1336,7 +1344,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
         mask = ds_mask['fmask'].isel(z = slice(0,1)).squeeze()
         da_area_W = ds_mask['e1f'].squeeze() * ds_mask['e2f'].squeeze().where(mask==1)
         del mask, ds_mask
-    
+
     if 'projection' in run_input:
         # Get dx and dy
         ds_mask = xr.open_dataset(f'{path_mask[run_input.index("projection")]}{file_mask[run_input.index("projection")]}')
@@ -1382,7 +1390,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
 
     ## Save intermediate files
     if 'historical' in run_input:
-        
+
         # Identify time
         timei_this = timei[run_input.index("historical")]
         timef_this = timef[run_input.index("historical")]
@@ -1424,7 +1432,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
             del ds_T_this_aux, ds_U_this_aux, ds_V_this_aux, ds_W_this_aux
         else:
             mode_historical = "w"
-            
+
         # If there are variables to load, calculate derived fields and save file
         if var_input_new != []:    
             ds_T_this = xr.Dataset()
@@ -1504,7 +1512,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
             del ds_T_this, ds_U_this, ds_V_this, ds_W_this
 
     if 'projection' in run_input:
-        
+
         # Identify time
         timei_this = timei[run_input.index("projection")]
         timef_this = timef[run_input.index("projection")]
@@ -1546,7 +1554,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
             del ds_T_this_aux, ds_U_this_aux, ds_V_this_aux, ds_W_this_aux
         else:
             mode_projection = "w"
-        
+
         # If there are variables to load, calculate derived fields and save file
         if var_input_new != []:
             ds_T_this = xr.Dataset()
@@ -1626,7 +1634,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
             del ds_T_this, ds_U_this, ds_V_this, ds_W_this
 
     if 'reanalysis' in run_input:
-        
+
         # Identify time
         timei_this = timei[run_input.index("reanalysis")]
         timef_this = timef[run_input.index("reanalysis")]
@@ -1647,7 +1655,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
             del ds_cmems_this_aux
         else:
             mode_cmems = "w"
-            
+
         # If there are variables to load, calculate derived fields and save file
         if var_input_new != []:    
             ds_cmems_this = xr.Dataset()
@@ -1686,7 +1694,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
                     ds_U_this = xr.open_dataset(f'{path_file}projection_U_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
                     ds_V_this = xr.open_dataset(f'{path_file}projection_V_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
                     ds_W_this = xr.open_dataset(f'{path_file}projection_W_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc')
-                
+
                 # Identify time
                 timei_this = timei[run_input.index("reanalysis")]
                 timef_this = timef[run_input.index("reanalysis")]
@@ -1723,7 +1731,7 @@ def save_intermediatefiles(ds_T_historical, ds_U_historical, ds_V_historical, ds
             print('    Reanalysis')
             ds_cmems_this.to_netcdf(f'{path_file}reanalysis_{timei_this}-{timef_this}_{area_input[0]}N-{area_input[1]}N_{area_input[2]}E-{area_input[3]}E.nc', mode = mode_cmems)         
             del ds_cmems_this
-        
+
 # Function to plot daily mean time series
 def plot_dailytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, path_file):
 
@@ -1954,7 +1962,7 @@ def plot_dailytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_l
                 time_this_2 = []
                 for t in ds_cmems['time_counter'][:]:
                     time_this_2 = np.append(time_this_2,date(1900,1,1) + timedelta(t/1440))
-            
+
             len_diff = len(da_2) - len(da_1)
             if len_diff > 0:
                 da_2 = da_2[0:-len_diff]
@@ -1962,7 +1970,7 @@ def plot_dailytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_l
             elif len_diff < 0:
                 da_1 = da_1[0:len_diff]
                 time_this_1 = time_this_1[0:len_diff]
-            
+
             fig = plt.figure()
             fig.set_size_inches(8, 4)
             ax = fig.add_axes([0.1,0.24,0.87,0.54])
@@ -1984,6 +1992,20 @@ def plot_dailytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_l
             plt.close(fig)
 
             print(f'    {var_long[i]} OK.')
+
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
 
 # Function to plot monthly mean time series
 def plot_monthlytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, path_file):
@@ -2266,6 +2288,20 @@ def plot_monthlytimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var
 
             print(f'    {var_long[i]} OK.')
 
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
+
 # Function to plot annual mean time series
 def plot_annualtimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, path_file):
 
@@ -2547,6 +2583,20 @@ def plot_annualtimeseries(path_mask, file_mask, var_list2, var_list2_cmems, var_
 
             print(f'    {var_long[i]} OK.')
 
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
+
 # Function to plot mean maps
 def plot_meanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, path_file):
 
@@ -2641,11 +2691,11 @@ def plot_meanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, v
             #meridians, parallels = getMeridansNParallels(box)
 
             # Define cmap (shift midpoint if the map contains positive and negative values)
-            if vmax > 0 and vmin < 0:
-                midpoint_this = 1 - vmax/(vmax - vmin)
-                cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
-            else:
-                cmap_this = cmap_list[i]
+            #if vmax > 0 and vmin < 0:
+            #    midpoint_this = 1 - vmax/(vmax - vmin)
+            #    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+            #else:
+            cmap_this = cmap_list[i]
 
             # Calculate statistics
             mean_this = str(np.round(np.nanmean(da),2))
@@ -2780,11 +2830,12 @@ def plot_meanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, v
             #meridians, parallels = getMeridansNParallels(box)
 
             # Define cmap (shift midpoint if the map contains positive and negative values)
-            if vmax > 0 and vmin < 0:
-                midpoint_this = 1 - vmax/(vmax - vmin)
-                cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
-            else:
-                cmap_this = cmap_list[i]
+            #if vmax > 0 and vmin < 0:
+            #    midpoint_this = 1 - vmax/(vmax - vmin)
+            #    cmap_this = shiftedColorMap('viridis', midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+                #cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+            #else:
+            cmap_this = cmap_list[i]
 
             # Calculate difference array
             if 'da_1_interp' in locals():
@@ -2908,6 +2959,20 @@ def plot_meanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, v
 
             print(f'    {var_long[i]} OK.')
 
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
+
 # Function to plot monthly mean maps
 def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, path_file):
 
@@ -3012,11 +3077,11 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
                 #meridians, parallels = getMeridansNParallels(box)
 
                 # Define cmap (shift midpoint if the map contains positive and negative values)
-                if vmax > 0 and vmin < 0:
-                    midpoint_this = 1 - vmax/(vmax - vmin)
-                    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
-                else:
-                    cmap_this = cmap_list[i]
+                #if vmax > 0 and vmin < 0:
+                #    midpoint_this = 1 - vmax/(vmax - vmin)
+                #    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+                #else:
+                cmap_this = cmap_list[i]
 
                 # Calculate statistics
                 mean_this = str(np.round(np.nanmean(da_this),2))
@@ -3170,11 +3235,11 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
                 #meridians, parallels = getMeridansNParallels(box)
 
                 # Define cmap (shift midpoint if the map contains positive and negative values)
-                if vmax > 0 and vmin < 0:
-                    midpoint_this = 1 - vmax/(vmax - vmin)
-                    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
-                else:
-                    cmap_this = cmap_list[i]
+                #if vmax > 0 and vmin < 0:
+                #    midpoint_this = 1 - vmax/(vmax - vmin)
+                #    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+                #else:
+                cmap_this = cmap_list[i]
 
                 # Calculate difference array
                 if 'da_1_interp_this' in locals():
@@ -3298,6 +3363,20 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
 
                 print(f'    {var_long[i]} ({da_1_month_str[mo]}) OK.')
 
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
+
 # Function to plot seasonal mean maps
 def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, path_file):    
 
@@ -3401,11 +3480,11 @@ def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_
                 #meridians, parallels = getMeridansNParallels(box)
 
                 # Define cmap (shift midpoint if the map contains positive and negative values)
-                if vmax > 0 and vmin < 0:
-                    midpoint_this = 1 - vmax/(vmax - vmin)
-                    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
-                else:
-                    cmap_this = cmap_list[i]
+                #if vmax > 0 and vmin < 0:
+                #    midpoint_this = 1 - vmax/(vmax - vmin)
+                #    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+                #else:
+                cmap_this = cmap_list[i]
 
                 # Calculate statistics
                 mean_this = str(np.round(np.nanmean(da_this),2))
@@ -3558,11 +3637,11 @@ def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_
                 #meridians, parallels = getMeridansNParallels(box)
 
                 # Define cmap (shift midpoint if the map contains positive and negative values)
-                if vmax > 0 and vmin < 0:
-                    midpoint_this = 1 - vmax/(vmax - vmin)
-                    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
-                else:
-                    cmap_this = cmap_list[i]
+                #if vmax > 0 and vmin < 0:
+                #    midpoint_this = 1 - vmax/(vmax - vmin)
+                #    cmap_this = shiftedColorMap(eval(cmap_list[i]), midpoint=midpoint_this, name = f'cmapshifted_{str(i)}')
+                #else:
+                cmap_this = cmap_list[i]
 
                 # Calculate difference array
                 if 'da_1_interp_this' in locals():
@@ -3685,6 +3764,20 @@ def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_
                 plt.close(fig)
 
                 print(f'    {var_long[i]} ({da_1_season_str[mo]}) OK.')
+
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
 
 # Function to plot monthly mean time series
 def plot_meanyear(path_mask, file_mask, var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, path_file):
@@ -3896,7 +3989,21 @@ def plot_meanyear(path_mask, file_mask, var_list2, var_list2_cmems, var_long, ru
             plt.close(fig)
 
             print(f'    {var_long[i]} OK.')
- 
-    # Function to copy ndv_input.py to output directory
+
+    # Close datasets
+    if 'historical' in run_input:
+        ds_T_historical.close()
+        ds_U_historical.close()
+        ds_V_historical.close()
+        ds_W_historical.close()
+    if 'projection' in run_input:
+        ds_T_projection.close()
+        ds_U_projection.close()
+        ds_V_projection.close()
+        ds_W_projection.close()
+    if 'reanalysis' in run_input:
+        ds_cmems.close()
+
+# Function to copy ndv_input.py to output directory
 def save_input(path_output_this):
     os.system('cp ndv_input.py ' + os.path.join(path_output_this,'ndv_input.py'))
