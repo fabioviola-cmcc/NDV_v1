@@ -34,8 +34,8 @@ check_var(var_input, run_input)
 
 ## Load input data and store in a Dataset
 print('2. Loading input files')
-ds_T_historical, ds_U_historical, ds_V_historical, ds_W_historical, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this = load_data_historical(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_file)
-ds_T_projection, ds_U_projection, ds_V_projection, ds_W_projection, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this = load_data_projection(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_output_this, path_file)
+ds_T_historical, ds_U_historical, ds_V_historical, ds_W_historical, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this = load_data_historical(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_file, nemo_version)
+ds_T_projection, ds_U_projection, ds_V_projection, ds_W_projection, var_list2, var_long, grid_input, cbar_title, cmap_list, path_output_this = load_data_projection(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_output_this, path_file, nemo_version)
 ds_cmems, var_list2_cmems, var_long, cbar_title, cmap_list, path_output_this = load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input, freq_input, timei, timef, area_input, var_input, path_output, subpath_output, path_output_this, path_file)
     
 ## Save intermediate files

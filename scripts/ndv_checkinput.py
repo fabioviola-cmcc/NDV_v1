@@ -26,6 +26,7 @@ def check_inputpath(path_input):
 ## Check filename format [F=frequency, YYYYMMDD=date, G=grid]
 def check_filename(file_input):
     file_check = ["f'ADRIACLIM2_{freq}_YYYYMMDD_grid_{grid}.nc'",
+                  "f'FLAME_MED24_{freq}_YYYYMMDD_grid_{grid}.nc'",
                   "f'YYYYMMDD_{freq}-CMCC--{grid}-BSe2r2-BS-b20180101_re-fv08.00.nc'",
                   "f'YYYYMMDD_{freq}-CMCC--{grid}-MFSe3r1-MED-b20200901_re-sv01.00.nc'"]
     for file in file_input:
@@ -46,7 +47,7 @@ def check_maskpath(path_mask):
         
 ## Check mask filename [default (AdriaClim release): 'mask_NEMO_AdriaClim.nc']
 def check_maskfile(file_mask):
-    maskfile_check = ['mask_NEMO_AdriaClim.nc','mesh_mask_gebco24_v8_drd_v3.nc']
+    maskfile_check = ['mesh_mask.nc','mask_NEMO_AdriaClim.nc','mesh_mask_gebco24_v8_drd_v3.nc']
     for maskfile in file_mask:
         if maskfile in maskfile_check:
             a = '    Mask filename OK.'
