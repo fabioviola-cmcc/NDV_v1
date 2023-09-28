@@ -27,7 +27,7 @@ Here you will activate the environment, load the necessary modules, modify the f
 - cd scripts/
 - vi ndv_input.py
 - Modify nvd_input.py according to your needs following the instructions in the file and save it
-- Example of how to run script from command line: time bsub -n 200 -Is -q p_long -P 0419 python ndv_run.py 
+- Example of how to run script from command line: time bsub -n 144 -Is -q p_long -P 0419 python ndv_run.py 
 
 ## 3. Output and files
 
