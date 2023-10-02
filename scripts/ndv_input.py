@@ -9,8 +9,8 @@
 # Lecce, IT, December 29, 2022
 ##################################################################
 ##################################################################
-## Define NEMO version
-nemo_version = '3.6'
+## Define NEMO version (Options ERDDAP (pos-proc nemo output), 3.6 or 4.2)
+nemo_version = 'ERDDAP'
 ## Define input data directory path [default (AdriaClim released): '/data/products/ADRIACLIM_RESM/NEMO/']
 #path_input = ['/data/products/ADRIACLIM_RESM/NEMO_OLD_WIND/'] # AdriaClim
 #path_input = ['/data/inputs/metocean/historical/model/ocean/CMCC/CMEMS/'] # CMEMS reanalysis
@@ -45,13 +45,13 @@ path_mask = ['/data/products/ADRIACLIM_RESM/ERDDAP/NEMO_NEW_WIND/info/',
 file_mask = ['mask_NEMO_AdriaClim.nc','mask_NEMO_AdriaClim.nc'] # Historical and projection
 
 ## Define output directory path
-path_output = '/work/opa/vs15521/NDV_v2/output/'
+path_output = '/work/opa/vs15521/NDV_v1/output/'
 
 ## Define output subdirectory path [default if empty: YYYYMMDD_HHMM)]
 subpath_output = 'test_Hist_Rean_allvars_1234567'
 
 ## Define directory path for intermediate NetCDF files
-path_file = '/work/opa/vs15521/NDV_v2/files/'
+path_file = '/work/opa/vs15521/NDV_v1/files/'
 
 ## Define type of run ['historical' or 'projection' (NEMO) or reanalysis (CMEMS)]
 #run_input = ['historical']

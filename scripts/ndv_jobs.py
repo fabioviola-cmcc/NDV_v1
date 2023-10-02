@@ -193,12 +193,16 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_T_historical = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                 # Drop one dimension from spatial coordinates
-                df_msk = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
-                ds_T_historical['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
-                ds_T_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
-
-                ds_T_historical = ds_T_historical.rename({'deptht': 'depth'})
-                if nemo_version!='3.6':
+                if nemo_version=='3.6' or nemo_version=='4.2':
+                    df_msk = xr.open_dataset(f'{path_mask[run_input.index("historical")]}{file_mask[run_input.index("historical")]}')
+                    ds_T_historical['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_T_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
+                    ds_T_historical = ds_T_historical.rename({'deptht': 'depth'})
+                if nemo_version=='ERDDAP':
+                    ds_T_historical = ds_T_historical.rename({'lat': 'nav_lat'})
+                    ds_T_historical = ds_T_historical.rename({'lon': 'nav_lon'})
+                    ds_T_historical = ds_T_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
+                if nemo_version=='4.2':
                     ds_T_historical = ds_T_historical.rename({'tos': 'sosstsst'})
                     ds_T_historical = ds_T_historical.rename({'sos': 'sosaline'})
                     ds_T_historical = ds_T_historical.rename({'zos': 'sossheig'})
@@ -221,11 +225,14 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_U_historical = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                 # Drop one dimension from spatial coordinates
-                ds_U_historical['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
-                ds_U_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
-
-                ds_U_historical = ds_U_historical.rename({'depthu': 'depth'})
-
+                if nemo_version=='3.6' or nemo_version=='4.2':
+                    ds_U_historical['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_U_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
+                    ds_U_historical = ds_U_historical.rename({'depthu': 'depth'})
+                if nemo_version=='ERDDAP':
+                    ds_this = ds_this.rename({'lat': 'nav_lat'})
+                    ds_this = ds_this.rename({'lon': 'nav_lon'})
+                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                 # Set index for spatial coordinates
                 ds_U_historical = ds_U_historical.set_xindex("nav_lat")
                 ds_U_historical = ds_U_historical.set_xindex("nav_lon")
@@ -242,11 +249,14 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_V_historical = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                 # Drop one dimension from spatial coordinates
-                ds_V_historical['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
-                ds_V_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
-
-                ds_V_historical = ds_V_historical.rename({'depthv': 'depth'})
-
+                if nemo_version=='3.6' or nemo_version=='4.2':
+                    ds_V_historical['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_V_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+                    ds_V_historical = ds_V_historical.rename({'depthv': 'depth'})
+                if nemo_version=='ERDDAP':
+                    ds_this = ds_this.rename({'lat': 'nav_lat'})
+                    ds_this = ds_this.rename({'lon': 'nav_lon'})
+                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                 # Set index for spatial coordinates
                 ds_V_historical = ds_V_historical.set_xindex("nav_lat")
                 ds_V_historical = ds_V_historical.set_xindex("nav_lon")
@@ -263,11 +273,14 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 # Open datasets
                 ds_W_historical = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                 # Drop one dimension from spatial coordinates
-                ds_W_historical['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
-                ds_W_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
-
-                ds_W_historical = ds_W_historical.rename({'depthw': 'depth'})
-
+                if nemo_version=='3.6' or nemo_version=='4.2':
+                    ds_W_historical['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                    ds_W_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+                    ds_W_historical = ds_W_historical.rename({'depthw': 'depth'})
+                if nemo_version=='ERDDAP':
+                    ds_this = ds_this.rename({'lat': 'nav_lat'})
+                    ds_this = ds_this.rename({'lon': 'nav_lon'})
+                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                 # Set index for spatial coordinates
                 ds_W_historical = ds_W_historical.set_xindex("nav_lat")
                 ds_W_historical = ds_W_historical.set_xindex("nav_lon")
@@ -295,12 +308,15 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_T, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    ds_this['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
-                    ds_this['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
-
-                    ds_this = ds_this.rename({'deptht': 'depth'})
-
-                    if nemo_version!='3.6':
+                    if nemo_version=='3.6' or nemo_version=='4.2':
+                        ds_this['nav_lat'] = df_msk['nav_lat'].sel(x=1, drop=True)
+                        ds_this['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
+                        ds_this = ds_this.rename({'deptht': 'depth'})
+                    if nemo_version=='ERDDAP':
+                        ds_this = ds_this.rename({'lat': 'nav_lat'})
+                        ds_this = ds_this.rename({'lon': 'nav_lon'})
+                        ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
+                    if nemo_version=='4.2':
                         ds_this = ds_this.rename({'tos': 'sosstsst'})
                         ds_this = ds_this.rename({'sos': 'sosaline'})
                         ds_this = ds_this.rename({'zos': 'sossheig'})
@@ -323,11 +339,14 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_U, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
-                    ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
-
-                    ds_this = ds_this.rename({'depthu': 'depth'})
-
+                    if nemo_version=='3.6' or nemo_version=='4.2':
+                        ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                        ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+                        ds_this = ds_this.rename({'depthu': 'depth'})
+                    if nemo_version=='ERDDAP':
+                        ds_this = ds_this.rename({'lat': 'nav_lat'})
+                        ds_this = ds_this.rename({'lon': 'nav_lon'})
+                        ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -344,11 +363,14 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_V, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
-                    ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
-
-                    ds_this = ds_this.rename({'depthv': 'depth'})
-
+                    if nemo_version=='3.6' or nemo_version=='4.2':
+                        ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                        ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+                        ds_this = ds_this.rename({'depthv': 'depth'})
+                    if nemo_version=='ERDDAP':
+                        ds_this = ds_this.rename({'lat': 'nav_lat'})
+                        ds_this = ds_this.rename({'lon': 'nav_lon'})
+                        ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -365,11 +387,14 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     # Open datasets
                     ds_this = xr.open_mfdataset(path_input_this+file_input_this_W, parallel = True)
                     # Drop one dimension from spatial coordinates
-                    ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
-                    ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
-
-                    ds_this = ds_this.rename({'depthw': 'depth'})
-
+                    if nemo_version=='3.6' or nemo_version=='4.2':
+                        ds_this['nav_lat'] = ds_msk['nav_lat'].sel(x=1, drop=True)
+                        ds_this['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
+                        ds_this = ds_this.rename({'depthw': 'depth'})
+                    if nemo_version=='ERDDAP':
+                        ds_this = ds_this.rename({'lat': 'nav_lat'})
+                        ds_this = ds_this.rename({'lon': 'nav_lon'})
+                        ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                     # Set index for spatial coordinates
                     ds_this = ds_this.set_xindex("nav_lat")
                     ds_this = ds_this.set_xindex("nav_lon")
@@ -427,8 +452,10 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                 if var == "T_VertInt":
                     # Calculate Vertically-Integrated Temperature and add it to respective Dataset
                     ds_T_historical['T_VertInt'] = ds_T_historical['votemper'].integrate("depth")
+                    bhf=[]
                     for i in range(0,len(ds_T_historical['T_VertInt'][:,0,0])):
-                        ds_T_historical['T_VertInt'][i,:,:] = np.squeeze(ds_T_historical['T_VertInt'][i,:,:])/bh
+                        bhf.append(bh)
+                    ds_T_historical['T_VertInt'] = ds_T_historical['T_VertInt']/bhf
                     # If T is not called, remove it from the Dataset and var_list
                     if 'T' not in var_input:
                         ds_T_historical = ds_T_historical.drop(var_list[var_load.index('T')])
@@ -885,8 +912,10 @@ def load_data_projection(path_input, file_input, path_mask, file_mask, run_input
                 if var == "T_VertInt":
                     # Calculate Vertically-Integrated Temperature and add it to respective Dataset
                     ds_T_projection['T_VertInt'] = ds_T_projection['votemper'].integrate("depth")
+                    bpf=[]
                     for i in range(0,len(ds_T_projection['T_VertInt'][:,0,0])):
-                        ds_T_projection['T_VertInt'][i,:,:] = np.squeeze(ds_T_projection['T_VertInt'][i,:,:])/bp
+                        bpf.append(bp)
+                    ds_T_projection['T_VertInt'] = ds_T_projection['T_VertInt']/bpf
                     # Add Vertically-Integrated Temperature to var_list
                     #var_list.insert(var_input.index('T_VertInt'),'T_VertInt')
                     # If T is not called, remove it from the Dataset and var_list
@@ -1246,8 +1275,10 @@ def load_data_reanalysis(path_input, file_input, path_mask, file_mask, run_input
                 if var == "T_VertInt":
                     # Calculate Vertically-Integrated Temperature and add it to respective Dataset
                     ds_TEMP['T_VertInt'] = np.squeeze(ds_TEMP['thetao']).fillna(0).integrate("depth")
+                    brf=[]
                     for i in range(0,len(ds_TEMP['T_VertInt'][:,0,0])):
-                        ds_TEMP['T_VertInt'][i,:,:] = np.squeeze(ds_TEMP['T_VertInt'][i,:,:])/br
+                        brf.append(br)
+                    ds_TEMP['T_VertInt'] = ds_TEMP['T_VertInt']/brf
 
                     # Mask T_VertInt again due to use of fillna(0) above
                     #ds_TEMP['T_VertInt'] = ds_TEMP['T_VertInt'].where(mask==1)
