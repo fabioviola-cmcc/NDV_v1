@@ -230,9 +230,9 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     ds_U_historical['nav_lon'] = df_msk['nav_lon'].sel(y=1, drop=True)
                     ds_U_historical = ds_U_historical.rename({'depthu': 'depth'})
                 if nemo_version=='ERDDAP':
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
+                    ds_U_historical = ds_U_historical.rename({'lat': 'nav_lat'})
+                    ds_U_historical = ds_U_historical.rename({'lon': 'nav_lon'})
+                    ds_U_historical = ds_U_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                 # Set index for spatial coordinates
                 ds_U_historical = ds_U_historical.set_xindex("nav_lat")
                 ds_U_historical = ds_U_historical.set_xindex("nav_lon")
@@ -254,9 +254,9 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     ds_V_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
                     ds_V_historical = ds_V_historical.rename({'depthv': 'depth'})
                 if nemo_version=='ERDDAP':
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
+                    ds_V_historical = ds_V_historical.rename({'lat': 'nav_lat'})
+                    ds_V_historical = ds_V_historical.rename({'lon': 'nav_lon'})
+                    ds_V_historical = ds_V_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                 # Set index for spatial coordinates
                 ds_V_historical = ds_V_historical.set_xindex("nav_lat")
                 ds_V_historical = ds_V_historical.set_xindex("nav_lon")
@@ -278,9 +278,9 @@ def load_data_historical(path_input, file_input, path_mask, file_mask, run_input
                     ds_W_historical['nav_lon'] = ds_msk['nav_lon'].sel(y=1, drop=True)
                     ds_W_historical = ds_W_historical.rename({'depthw': 'depth'})
                 if nemo_version=='ERDDAP':
-                    ds_this = ds_this.rename({'lat': 'nav_lat'})
-                    ds_this = ds_this.rename({'lon': 'nav_lon'})
-                    ds_this = ds_this.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
+                    ds_W_historical = ds_W_historical.rename({'lat': 'nav_lat'})
+                    ds_W_historical = ds_W_historical.rename({'lon': 'nav_lon'})
+                    ds_W_historical = ds_W_historical.swap_dims({'nav_lat': 'y', 'nav_lon': 'x'})
                 # Set index for spatial coordinates
                 ds_W_historical = ds_W_historical.set_xindex("nav_lat")
                 ds_W_historical = ds_W_historical.set_xindex("nav_lon")
