@@ -3005,7 +3005,7 @@ def plot_meanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, v
         ds_cmems.close()
 
 # Function to plot monthly mean maps
-def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, path_file):
+def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, cmaprange_diff_input, cmap_diff_limits, path_file):
 
     # Load datasets
     if 'historical' in run_input:
@@ -3375,9 +3375,14 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
                 #m.drawparallels(parallels, labels=[True, False, False, True], linewidth=0.1)
                 #m.drawmeridians(meridians, labels=[True, False, False, True], linewidth=0.1)
                 # define scale, with white at zero
-                vmin_diff = np.nanmin(da_diff) 
-                vmax_diff = np.nanmax(da_diff) 
-                norm = colors.TwoSlopeNorm(vcenter=0)
+                if (cmaprange_diff_input == True):
+                    vmin_diff = -cmap_diff_limits[i]
+                    vmax_diff = cmap_diff_limits[i]
+                    norm = colors.Normalize(vmin=vmin_diff, vmax=vmax_diff)
+                else:
+                    vmin_diff = np.nanmin(da_diff) 
+                    vmax_diff = np.nanmax(da_diff) 
+                    norm = colors.TwoSlopeNorm(vcenter=0)
                 if 'da_2_interp' in locals():
                     im = ax_3.imshow(da_diff, origin='lower', cmap=cm.balance, norm=norm,
                                      extent=[np.nanmin(da_1_lon),np.nanmax(da_1_lon), 
@@ -3409,7 +3414,7 @@ def plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_i
         ds_cmems.close()
 
 # Function to plot seasonal mean maps
-def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, path_file):    
+def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, cmaprange_diff_input, cmap_diff_limits, path_file):    
 
     # Load datasets
     if 'historical' in run_input:
@@ -3777,9 +3782,14 @@ def plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_
                 #m.drawparallels(parallels, labels=[True, False, False, True], linewidth=0.1)
                 #m.drawmeridians(meridians, labels=[True, False, False, True], linewidth=0.1)
                 # define scale, with white at zero
-                vmin_diff = np.nanmin(da_diff) 
-                vmax_diff = np.nanmax(da_diff) 
-                norm = colors.TwoSlopeNorm(vcenter=0)
+                if (cmaprange_diff_input == True):
+                    vmin_diff = -cmap_diff_limits[i]
+                    vmax_diff = cmap_diff_limits[i]
+                    norm = colors.Normalize(vmin=vmin_diff, vmax=vmax_diff)
+                else:
+                    vmin_diff = np.nanmin(da_diff)
+                    vmax_diff = np.nanmax(da_diff)
+                    norm = colors.TwoSlopeNorm(vcenter=0)
                 if 'da_2_interp' in locals():
                     im = ax_3.imshow(da_diff, origin='lower', cmap=cm.balance, norm=norm,
                                      extent=[np.nanmin(da_1_lon),np.nanmax(da_1_lon), 

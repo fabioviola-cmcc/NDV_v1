@@ -73,13 +73,13 @@ if 4 in plot_input:
 if 5 in plot_input:
     n+=1
     print(f'{str(n)}. Plotting 2D maps of monthly mean fields')
-    plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, path_file)
+    plot_monthlymeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, cmaprange_diff_input, cmap_diff_limits, path_file)
 
 ## Plot 2D maps of seasonal mean fields
 if 6 in plot_input:
     n+=1
     print(f'{str(n)}. Plotting 2D maps of seasonal mean fields')
-    plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, path_file)
+    plot_seasonalmeanmaps(var_list2, var_list2_cmems, var_long, run_input, grid_input, var_input, area_input, path_output_this, timei, timef, cbar_title, cmap_list, cmaprange_input, cmaprange_diff_input, cmap_diff_limits, path_file)
 
 # Plot mean year
 if 7 in plot_input:
